@@ -1,51 +1,53 @@
 import type { ServiceCardProps } from './ServiceCard.types'
+import { formatPriceCents } from './ServiceCard.behavior'
 import './ServiceCard.css'
 
-const cls = (...parts: (string | false | undefined)[]) => parts.filter(Boolean).join(' ')
-
-/** akong ServiceCard · Web · DOM `<button>` */
+/** akong ServiceCard · Web · 整卡 click · `<div role="button">` */
 export function ServiceCard(props: ServiceCardProps) {
-  const {
-    variant = 'primary',
-    size = 'md',
-    disabled = false,
-    loading = false,
-    fullWidth = false,
-    iconLeft,
-    iconRight,
-    children,
-    onClick,
-    onPress,
-    type = 'button',
-    ariaLabel,
-  } = props
+  const { id, title, cover, priceCents, seller, slaHours, onPress } = props
 
   const handle = () => {
-    if (disabled || loading) return
-    onClick?.()
     onPress?.()
   }
 
+  const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onPress?.()
+    }
+  }
+
   return (
-    <button
-      type={type}
-      aria-label={ariaLabel}
-      aria-busy={loading || undefined}
-      aria-disabled={disabled || undefined}
-      disabled={disabled}
+    <div
+      data-id={id}
+      role="button"
+      tabIndex={0}
+      aria-label={title}
       onClick={handle}
-      className={cls(
-        'ak-service-card',
-        `ak-service-card--${variant}`,
-        `ak-service-card--${size}`,
-        fullWidth && 'ak-service-card--full-width',
-        loading && 'ak-service-card--loading',
-      )}
+      onKeyDown={handleKey}
+      className="ak-service-card"
     >
-      {iconLeft && <span className="ak-service-card__icon">{iconLeft}</span>}
-      {children && <span>{children}</span>}
-      {iconRight && <span className="ak-service-card__icon">{iconRight}</span>}
-    </button>
+      <div className="ak-service-card__cover">
+        <img className="ak-service-card__cover-img" src={cover} alt={title} loading="lazy" />
+      </div>
+      <div className="ak-service-card__body">
+        <h3 className="ak-service-card__title">{title}</h3>
+        <p className="ak-service-card__price">{formatPriceCents(priceCents)}</p>
+        <div className="ak-service-card__seller">
+          <img
+            className="ak-service-card__avatar"
+            src={seller.avatar}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+          />
+          <span className="ak-service-card__seller-name">{seller.name}</span>
+        </div>
+        {typeof slaHours === 'number' && (
+          <p className="ak-service-card__sla">{slaHours}h 内交付</p>
+        )}
+      </div>
+    </div>
   )
 }
 

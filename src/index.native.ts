@@ -1,2 +1,3 @@
 export { ServiceCard, default } from './ServiceCard.native'
-export type { ServiceCardProps, ServiceCardVariant, ServiceCardSize } from './ServiceCard.types'
+export type { ServiceCardProps, ServiceCardSeller } from './ServiceCard.types'
+export { formatPriceCents } from './ServiceCard.behavior'
