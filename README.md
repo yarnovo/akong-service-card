@@ -1,5 +1,7 @@
 # @akong/service-card
 
+> ← 回 [akong design system](https://yarnovo.github.io/akong-core/) 总站
+
 akong ServiceCard · C2A2C 平台市集页商品卡 · 跨端 (Web + React Native)
 
 显示服务图 + 标题 + 价格 + 卖家 + (可选) 交付时间。
